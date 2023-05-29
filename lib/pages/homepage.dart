@@ -70,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
       items: _items,
       onChanged: (_value) {
         setState(() {
-          _selectedCoin= _value;
+          _selectedCoin = _value;
         });
       },
       icon: Icon(
@@ -89,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Map _data = jsonDecode(_snapshot.data.toString());
             num _usdPrice = _data["market_data"]["current_price"]["usd"];
             num _change24 = _data["market_data"]["price_change_percentage_24h"];
-            // Text(_usdPrice.toString());
+            Map _exchangeRates = _data["market_data"]["current_price"];
             return Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               mainAxisSize: MainAxisSize.max,
@@ -98,7 +98,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     onDoubleTap: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (BuildContext context) {
-                        return DetailsPage();
+                        return DetailsPage(
+                          rate: _exchangeRates,
+                        );
                       }));
                     },
                     child: coin_image_Widget(_data["image"]["large"])),
