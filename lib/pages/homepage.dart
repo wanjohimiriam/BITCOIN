@@ -30,15 +30,12 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       body: SafeArea(
           child: Center(
-            child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          _selectedDropDown(),
-          _widgetData()
-          ],
-      ),
-          )),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisSize: MainAxisSize.max,
+          children: [_selectedDropDown(), _widgetData()],
+        ),
+      )),
     );
   }
 
@@ -48,12 +45,13 @@ class _MyHomePageState extends State<MyHomePage> {
         .map(
           (e) => DropdownMenuItem(
             value: e,
-            child: Text(e,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 40,
-              fontWeight: FontWeight.w600
-            ),),
+            child: Text(
+              e,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 40,
+                  fontWeight: FontWeight.w600),
+            ),
           ),
         )
         .toList();
@@ -61,28 +59,31 @@ class _MyHomePageState extends State<MyHomePage> {
       value: _coins.first,
       iconSize: 30,
       dropdownColor: Color.fromRGBO(83, 88, 206, 1.0),
-      items: _items, onChanged: (_value) {},
-      icon: Icon(Icons.arrow_drop_down_sharp,
-      color: Colors.white,),
+      items: _items,
+      onChanged: (_value) {},
+      icon: Icon(
+        Icons.arrow_drop_down_sharp,
+        color: Colors.white,
+      ),
       underline: Container(),
-      );
-  }
-  Widget _widgetData(){
-    return FutureBuilder(
-      builder: (BuildContext _context, AsyncSnapshot _snapshot){
-        if(_snapshot.hasData){
-          Map _data= jsonDecode(_snapshot.data.toString());
-          return Text(
-            _data.toString()
-          );
-        }else{
-          return Center(
-            child: CircularProgressIndicator(
-              color:  Colors.white,
-            ),
-          );
-        }
-      }
     );
+  }
+
+  Widget _widgetData() {
+    return FutureBuilder(
+      future: _http!.get("/coins/bitcoin"),
+        builder: (BuildContext _context, AsyncSnapshot _snapshot) {
+      if (_snapshot.hasData) {
+        Map _data = jsonDecode(_snapshot.data.toString());
+        num _usdPrice = _data["market_data"]["current_price"]["usd"];
+        return Text(_usdPrice.toString());
+      } else {
+        return Center(
+          child: CircularProgressIndicator(
+            color: Colors.white,
+          ),
+        );
+      }
+    });
   }
 }
