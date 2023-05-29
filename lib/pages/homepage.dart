@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, no_leading_underscores_for_local_identifiers
+// ignore_for_file: prefer_const_constructors, no_leading_underscores_for_local_identifiers, non_constant_identifier_names
 
 import 'dart:convert';
 
@@ -76,7 +76,14 @@ class _MyHomePageState extends State<MyHomePage> {
       if (_snapshot.hasData) {
         Map _data = jsonDecode(_snapshot.data.toString());
         num _usdPrice = _data["market_data"]["current_price"]["usd"];
-        return Text(_usdPrice.toString());
+        // Text(_usdPrice.toString());
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            current_rate_Price(_usdPrice)
+          ],
+        );
       } else {
         return Center(
           child: CircularProgressIndicator(
@@ -85,5 +92,15 @@ class _MyHomePageState extends State<MyHomePage> {
         );
       }
     });
+  }
+  Widget current_rate_Price( num _rate){
+    return Text(
+      "${_rate.toStringAsFixed(2)}USD",
+      style: TextStyle(
+        color: Colors.white54,
+        fontSize: 15,
+        fontWeight: FontWeight.w600
+      ),
+    );
   }
 }
