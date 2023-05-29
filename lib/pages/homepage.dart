@@ -71,61 +71,77 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _widgetData() {
     return FutureBuilder(
-      future: _http!.get("/coins/bitcoin"),
+        future: _http!.get("/coins/bitcoin"),
         builder: (BuildContext _context, AsyncSnapshot _snapshot) {
-      if (_snapshot.hasData) {
-        Map _data = jsonDecode(_snapshot.data.toString());
-        num _usdPrice = _data["market_data"]["current_price"]["usd"];
-        num _change24= _data["market_data"]["price_change_percentage_24h"];
-        // Text(_usdPrice.toString());
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            coin_image_Widget(
-              _data["image"]["large"]
-            ),
-            current_rate_Price(_usdPrice),
-            percentage_changeNum(_change24),
-          ],
-        );
-      } else {
-        return Center(
-          child: CircularProgressIndicator(
-            color: Colors.white,
-          ),
-        );
-      }
-    });
+          if (_snapshot.hasData) {
+            Map _data = jsonDecode(_snapshot.data.toString());
+            num _usdPrice = _data["market_data"]["current_price"]["usd"];
+            num _change24 = _data["market_data"]["price_change_percentage_24h"];
+            // Text(_usdPrice.toString());
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                coin_image_Widget(_data["image"]["large"]),
+                current_rate_Price(_usdPrice),
+                percentage_changeNum(_change24),
+                description_card_widget(_data["description"]['en'])
+              ],
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(
+                color: Colors.white,
+              ),
+            );
+          }
+        });
   }
-  Widget current_rate_Price( num _rate){
+
+  Widget current_rate_Price(num _rate) {
     return Text(
       "${_rate.toStringAsFixed(2)}USD",
       style: TextStyle(
-        color: Colors.white,
-        fontSize: 30,
-        fontWeight: FontWeight.w400
-      ),
+          color: Colors.white, fontSize: 30, fontWeight: FontWeight.w400),
     );
   }
-  Widget percentage_changeNum(num _change){
-    return Text("${_change.toString()}%",
-    style: TextStyle(
-      color: Colors.white54,
-      fontSize: 20,
-      fontWeight: FontWeight.w300
-    ),);
+
+  Widget percentage_changeNum(num _change) {
+    return Text(
+      "${_change.toString()}%",
+      style: TextStyle(
+          color: Colors.white54, fontSize: 20, fontWeight: FontWeight.w300),
+    );
   }
-  Widget coin_image_Widget(String img_url){
+
+  Widget coin_image_Widget(String img_url) {
     return Container(
       padding: EdgeInsets.symmetric(
         vertical: dev_height! * 0.02,
       ),
       height: dev_height! * 0.15,
       width: dev_width! * 0.15,
-      decoration: BoxDecoration(
-        image: DecorationImage(image: NetworkImage(img_url))
+      decoration:
+          BoxDecoration(image: DecorationImage(image: NetworkImage(img_url))),
+    );
+  }
+
+  Widget description_card_widget(String _description) {
+    return Container(
+      height: dev_height! * 0.45,
+      width: dev_width! * 0.90,
+      padding: EdgeInsets.symmetric(
+        vertical: dev_height! * 0.01,
+        horizontal: dev_width! * 0.01,
       ),
+      margin: EdgeInsets.symmetric(
+        vertical: dev_height! * 0.02,
+      ),
+      color: Color.fromRGBO(83, 88, 206, 0.5),
+      child: Text(_description,
+      style: TextStyle(
+        color: Colors.white,
+      ),),
     );
   }
 }
