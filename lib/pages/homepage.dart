@@ -82,6 +82,9 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           mainAxisSize: MainAxisSize.max,
           children: [
+            coin_image_Widget(
+              _data["image"]["large"]
+            ),
             current_rate_Price(_usdPrice),
             percentage_changeNum(_change24),
           ],
@@ -112,5 +115,17 @@ class _MyHomePageState extends State<MyHomePage> {
       fontSize: 20,
       fontWeight: FontWeight.w300
     ),);
+  }
+  Widget coin_image_Widget(String img_url){
+    return Container(
+      padding: EdgeInsets.symmetric(
+        vertical: dev_height! * 0.02,
+      ),
+      height: dev_height! * 0.15,
+      width: dev_width! * 0.15,
+      decoration: BoxDecoration(
+        image: DecorationImage(image: NetworkImage(img_url))
+      ),
+    );
   }
 }
