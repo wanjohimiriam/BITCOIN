@@ -1,4 +1,6 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, no_leading_underscores_for_local_identifiers
+
+import 'dart:convert';
 
 import 'package:bitcoin/services/http_service.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +33,10 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         mainAxisSize: MainAxisSize.max,
-        children: [_selectedDropDown()],
+        children: [
+          _selectedDropDown(),
+          _widgetData()
+          ],
       ),
           )),
     );
@@ -61,5 +66,23 @@ class _MyHomePageState extends State<MyHomePage> {
       color: Colors.white,),
       underline: Container(),
       );
+  }
+  Widget _widgetData(){
+    return FutureBuilder(
+      builder: (BuildContext _context, AsyncSnapshot _snapshot){
+        if(_snapshot.hasData){
+          Map _data= jsonDecode(_snapshot.data.toString());
+          return Text(
+            _data.toString()
+          );
+        }else{
+          return Center(
+            child: CircularProgressIndicator(
+              color:  Colors.white,
+            ),
+          );
+        }
+      }
+    );
   }
 }
