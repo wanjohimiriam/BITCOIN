@@ -16,6 +16,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   double? dev_width, dev_height;
+  String _selectedCoin = "bitcoin";
 
   HTTPService? _http;
   @override
@@ -41,7 +42,13 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _selectedDropDown() {
-    List<String> _coins = ["bitcoin"];
+    List<String> _coins = [
+      "bitcoin",
+      "ethereum",
+      "tether",
+      "cardano",
+      "ripple"
+    ];
     List<DropdownMenuItem> _items = _coins
         .map(
           (e) => DropdownMenuItem(
@@ -57,11 +64,15 @@ class _MyHomePageState extends State<MyHomePage> {
         )
         .toList();
     return DropdownButton(
-      value: _coins.first,
+      value: _selectedCoin,
       iconSize: 30,
       dropdownColor: Color.fromRGBO(83, 88, 206, 1.0),
       items: _items,
-      onChanged: (_value) {},
+      onChanged: (_value) {
+        setState(() {
+          _selectedCoin= _value;
+        });
+      },
       icon: Icon(
         Icons.arrow_drop_down_sharp,
         color: Colors.white,
@@ -72,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _widgetData() {
     return FutureBuilder(
-        future: _http!.get("/coins/bitcoin"),
+        future: _http!.get("/coins/$_selectedCoin"),
         builder: (BuildContext _context, AsyncSnapshot _snapshot) {
           if (_snapshot.hasData) {
             Map _data = jsonDecode(_snapshot.data.toString());
