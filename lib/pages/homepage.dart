@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:bitcoin/pages/detailspage.dart';
 import 'package:bitcoin/services/http_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -82,7 +83,14 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               mainAxisSize: MainAxisSize.max,
               children: [
-                coin_image_Widget(_data["image"]["large"]),
+                GestureDetector(
+                    onDoubleTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (BuildContext context) {
+                        return DetailsPage();
+                      }));
+                    },
+                    child: coin_image_Widget(_data["image"]["large"])),
                 current_rate_Price(_usdPrice),
                 percentage_changeNum(_change24),
                 description_card_widget(_data["description"]['en'])
@@ -138,10 +146,12 @@ class _MyHomePageState extends State<MyHomePage> {
         vertical: dev_height! * 0.02,
       ),
       color: Color.fromRGBO(83, 88, 206, 0.5),
-      child: Text(_description,
-      style: TextStyle(
-        color: Colors.white,
-      ),),
+      child: Text(
+        _description,
+        style: TextStyle(
+          color: Colors.white,
+        ),
+      ),
     );
   }
 }
