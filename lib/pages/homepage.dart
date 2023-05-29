@@ -76,12 +76,14 @@ class _MyHomePageState extends State<MyHomePage> {
       if (_snapshot.hasData) {
         Map _data = jsonDecode(_snapshot.data.toString());
         num _usdPrice = _data["market_data"]["current_price"]["usd"];
+        num _change24= _data["market_data"]["price_change_percentage_24h"];
         // Text(_usdPrice.toString());
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           mainAxisSize: MainAxisSize.max,
           children: [
-            current_rate_Price(_usdPrice)
+            current_rate_Price(_usdPrice),
+            percentage_changeNum(_change24),
           ],
         );
       } else {
@@ -97,10 +99,18 @@ class _MyHomePageState extends State<MyHomePage> {
     return Text(
       "${_rate.toStringAsFixed(2)}USD",
       style: TextStyle(
-        color: Colors.white54,
-        fontSize: 15,
-        fontWeight: FontWeight.w600
+        color: Colors.white,
+        fontSize: 30,
+        fontWeight: FontWeight.w400
       ),
     );
+  }
+  Widget percentage_changeNum(num _change){
+    return Text("${_change.toString()}%",
+    style: TextStyle(
+      color: Colors.white54,
+      fontSize: 20,
+      fontWeight: FontWeight.w300
+    ),);
   }
 }
